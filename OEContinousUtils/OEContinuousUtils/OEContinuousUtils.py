@@ -6,12 +6,13 @@ import numpy as np
 # import struct
 # from copy import deepcopy
 import filecmp
-import OpenEphys as OpE
+import OEContinuousUtils.OpenEphys as OpE
 
 
 def get_header_string(filepath):
     f = open(filepath, 'rb')
     header_string = f.read(1024)
+    f.close()
     return header_string
 
 
@@ -33,7 +34,7 @@ def write_continuous(filepath, ch, header_string):
         n_samples = int(data['header']['blockLength'])
         if n_samples != OpE.SAMPLES_PER_RECORD:
             raise ValueError('illegal block size')
-        n_samples = np.array(n_samples, '<u2')
+        n_samples = np.array((n_samples,), '<u2')
         n_records = len(data['recordingNumber'])
 
         for rec_in in range(n_records):

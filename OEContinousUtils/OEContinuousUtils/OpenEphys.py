@@ -27,9 +27,9 @@ RECORD_SIZE = 8 + 16 + SAMPLES_PER_RECORD*2 + 10 # size of each continuous recor
 RECORD_MARKER = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 255])
 
 # constants for pre-allocating matrices:
-MAX_NUMBER_OF_SPIKES = 1e6
-MAX_NUMBER_OF_RECORDS = 1e6
-MAX_NUMBER_OF_CONTINUOUS_SAMPLES = 5 * 1e8
+MAX_NUMBER_OF_SPIKES = int(1e6)
+MAX_NUMBER_OF_RECORDS = int(1e6)
+MAX_NUMBER_OF_CONTINUOUS_SAMPLES = int(5 * 1e8)
 MAX_NUMBER_OF_EVENTS = 1e6
 
 def load(filepath):
@@ -154,9 +154,9 @@ def loadContinuous(filepath, dtype = float, trim_last_record=True):
         recordingNumbers[recordNumber] = (np.fromfile(f,np.dtype('>u2'),1)) # big-endian 16-bit unsigned integer
         
         if dtype == float: # Convert data to float array and convert bits to voltage.
-            data = np.fromfile(f,np.dtype('>i2'),N) * float(header['bitVolts']) # big-endian 16-bit signed integer, multiplied by bitVolts   
+            data = np.fromfile(f,np.dtype('>i2'),N[0]) * float(header['bitVolts']) # big-endian 16-bit signed integer, multiplied by bitVolts
         else:  # Keep data in signed 16 bit integer format.
-            data = np.fromfile(f,np.dtype('>i2'),N)  # big-endian 16-bit signed integer
+            data = np.fromfile(f,np.dtype('>i2'),N[0])  # big-endian 16-bit signed integer
         try:
             samples[indices[recordNumber]:indices[recordNumber+1]] = data            
         except ValueError:
