@@ -18,7 +18,7 @@ def get_header_string(filepath):
 def write_continuous(filepath, ch, header_string):
 
     indices = np.arange(0, OpE.MAX_NUMBER_OF_RECORDS*OpE.SAMPLES_PER_RECORD, OpE.SAMPLES_PER_RECORD, np.dtype(np.int64))
-    marker = np.array([0, 1, 2, 3, 4, 6, 7, 8, 255], np.int8)
+    marker = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 255], np.int8)
     # open file to write the data
     f = open(filepath, 'wb')
 
@@ -49,8 +49,7 @@ def write_continuous(filepath, ch, header_string):
 if __name__ == '__main__':
     file_in = '/Users/fpbatta/dataLisa/rat27_plusmaze_base_II_2016-03-24_14-10-08/100_CH9.continuous'
     file_out = '/Users/fpbatta/dataLisa/rat27_plusmaze_base_II_2016-03-24_14-10-08/write_test'
-    channel_data = OpE.loadContinuous(file_in,
-                                      dtype=np.int16)
+    channel_data = OpE.loadContinuous(file_in, dtype=np.int16, trim_last_record=False)
     print(channel_data)
     hs = get_header_string(file_in)
     write_continuous(file_out, [channel_data, ], hs)

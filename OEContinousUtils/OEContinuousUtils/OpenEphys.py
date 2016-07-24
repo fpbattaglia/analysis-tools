@@ -101,7 +101,7 @@ def loadFolderToArray(folderpath, channels = 'all', dtype = float, source = '100
             
     return data_array
 
-def loadContinuous(filepath, dtype = float):
+def loadContinuous(filepath, dtype = float, trim_last_record=True):
 
     assert dtype in (float, np.int16), \
       'Invalid data type specified for loadContinous, valid types are float and np.int16'
@@ -167,11 +167,16 @@ def loadContinuous(filepath, dtype = float):
         
     #print recordNumber
     #print index
-        
-    ch['header'] = header 
-    ch['timestamps'] = timestamps[0:recordNumber]
-    ch['data'] = samples[0:indices[recordNumber]]  # OR use downsample(samples,1), to save space
-    ch['recordingNumber'] = recordingNumbers[0:recordNumber]
+
+    ch['header'] = header
+    if trim_last_record:
+        ch['timestamps'] = timestamps[0:recordNumber]
+        ch['data'] = samples[0:indices[recordNumber]]  # OR use downsample(samples,1), to save space
+        ch['recordingNumber'] = recordingNumbers[0:recordNumber]
+    else:
+        ch['timestamps'] = timestamps[0:recordNumber+1]
+        ch['data'] = samples[0:indices[recordNumber+1]]  # OR use downsample(samples,1), to save space
+        ch['recordingNumber'] = recordingNumbers[0:recordNumber+1]
     f.close()
     return ch
     
