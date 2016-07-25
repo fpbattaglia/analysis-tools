@@ -15,8 +15,9 @@ setup(
     author_email = "fpbattaglia@gmail.com",
     description = ("Utilities to manipulate Open Ephys continuous file",),
     license = "GPL",
-    keywords = "example documentation tutorial",
+    keywords = "OpenEphys data analysis",
     packages=['OEContinuousUtils', ],
+    scripts=['bin/merge_continuous.py'],
     long_description=read('README'),
     classifiers=[
         "Development Status :: 3 - Alpha",

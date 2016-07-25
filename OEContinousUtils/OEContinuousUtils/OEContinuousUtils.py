@@ -1,11 +1,11 @@
-# import os
+import os
 import numpy as np
 # import scipy.signal
 # import scipy.io
 # import time
 # import struct
 # from copy import deepcopy
-import filecmp
+import glob
 import OEContinuousUtils.OpenEphys as OpE
 
 
@@ -47,12 +47,37 @@ def write_continuous(filepath, ch, header_string):
     f.close()
 
 
-if __name__ == '__main__':
-    file_in = '/Users/fpbatta/dataLisa/rat27_plusmaze_base_II_2016-03-24_14-10-08/100_CH9.continuous'
-    file_out = '/Users/fpbatta/dataLisa/rat27_plusmaze_base_II_2016-03-24_14-10-08/write_test'
-    channel_data = OpE.loadContinuous(file_in, dtype=np.int16, trim_last_record=False)
-    print(channel_data)
-    hs = get_header_string(file_in)
-    write_continuous(file_out, [channel_data, ], hs)
-    channel_data2 = OpE.loadContinuous(file_out, dtype=np.int16)
-    assert filecmp.cmp(file_in, file_out)
+def get_merge_channel_list(ch, data_dir=None):
+    file_list = []
+
+    file_glob = '100_CH' + str(ch)+'_?.continuous'
+    if data_dir:
+        file_glob = os.path.join(data_dir, file_glob)
+    file_list = glob.glob(file_glob)
+    file1 = '100_CH' + str(ch) + '.continuous'
+    if data_dir:
+        file1 = os.path.join(data_dir, file1)
+    file_list.insert(0, file1)
+    return file_list
+
+
+def merge_channel(ch, data_dir=None, remove_existing=False):
+    file_out = '100_CH' + str(ch)+'_merged.continuous'
+    if data_dir:
+        file_out = os.path.join(data_dir, file_out)
+
+    if os.path.isfile(file_out):
+        if remove_existing:
+            os.remove(file_out)
+        else:
+            raise FileExistsError('output file exists.')
+
+    file_list = get_merge_channel_list(ch, data_dir)
+    if len(file_list) <= 1:
+        raise ValueError('there are less than two files to merge, nothing to do.')
+    ch_data = []
+    hs = get_header_string(file_list[0])
+    for f in file_list:
+        c = OpE.loadContinuous(f, dtype=np.int16, trim_last_record=False)
+        ch_data.append(c)
+    write_continuous(file_out, ch_data, hs)
