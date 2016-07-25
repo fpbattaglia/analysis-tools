@@ -3,7 +3,7 @@ import os
 import filecmp
 import numpy as np
 from numpy.testing import assert_array_equal as ae
-from OEContinuousUtils.OEContinuousUtils import (get_header_string, write_continuous, get_merge_channel_list,
+from OEContinuousUtils.MergeUtils import (get_header_string, write_continuous, get_merge_channel_list,
                                                  merge_channel)
 from OEContinuousUtils.OpenEphys import (loadContinuous,)
 test_files_dir = '/Users/fpbatta/dataLisa/rat27_plusmaze_base_II_2016-03-24_14-10-08/'

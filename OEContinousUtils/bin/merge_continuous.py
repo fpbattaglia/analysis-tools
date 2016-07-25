@@ -2,7 +2,7 @@
 
 import argparse
 
-from OEContinuousUtils.OEContinuousUtils import merge_channel
+from OEContinuousUtils.MergeUtils import merge_channel
 
 
 import argparse
