@@ -11,3 +11,7 @@ optional arguments:
   -h, --help   show this help message and exit
   -x           replace existing merge file
   -d DATA_DIR  folder where data reside
+  -a           do AUX files instead of CH files
+REVISION HISTORY
+
+0.2: now processes AUX files too

@@ -31,6 +31,18 @@ class TestWrite(unittest.TestCase):
         ae(np.concatenate((ch_data['timestamps'], ch_data_2['timestamps'])), ch_data_out['timestamps'])
 
 
+class TestLists(unittest.TestCase):
+    def test_merge_list(self):
+        os.chdir(test_files_dir)
+        l = get_merge_channel_list(9)
+        self.assertEqual(l, ['100_CH9.continuous', '100_CH9_2.continuous'])
+
+    def test_merge_aux_list(self):
+        os.chdir(test_files_dir)
+        l = get_merge_channel_list(1, sig_prefix='AUX')
+        self.assertEqual(l , ['100_AUX1.continuous', '100_AUX1_2.continuous'])
+
+@unittest.skip('no mergers now')
 class TestMerge(unittest.TestCase):
 
     def setUp(self):
@@ -56,12 +68,6 @@ class TestMerge(unittest.TestCase):
         f.write('ciao')
         f.close()
         merge_channel(9, remove_existing=True)
-
-
-    def test_merge_list(self):
-        os.chdir(test_files_dir)
-        l = get_merge_channel_list(9)
-        self.assertEqual(l, ['100_CH9.continuous', '100_CH9_2.continuous'])
 
     @unittest.skip("showing class skipping")
     def test_merge_channel(self):

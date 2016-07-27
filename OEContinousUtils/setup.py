@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "OEContinuousUtils",
-    version = "0.1",
+    version = "0.2",
     author = "Francesco Battaglia",
     author_email = "fpbattaglia@gmail.com",
     description = ("Utilities to manipulate Open Ephys continuous file",),

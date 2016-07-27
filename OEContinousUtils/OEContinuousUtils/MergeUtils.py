@@ -47,22 +47,22 @@ def write_continuous(filepath, ch, header_string):
     f.close()
 
 
-def get_merge_channel_list(ch, data_dir=None):
+def get_merge_channel_list(ch, data_dir=None, sig_prefix='CH'):
     file_list = []
 
-    file_glob = '100_CH' + str(ch)+'_?.continuous'
+    file_glob = '100_' + sig_prefix + str(ch)+'_?.continuous'
     if data_dir:
         file_glob = os.path.join(data_dir, file_glob)
     file_list = glob.glob(file_glob)
-    file1 = '100_CH' + str(ch) + '.continuous'
+    file1 = '100_' + sig_prefix + str(ch) + '.continuous'
     if data_dir:
         file1 = os.path.join(data_dir, file1)
     file_list.insert(0, file1)
     return file_list
 
 
-def merge_channel(ch, data_dir=None, remove_existing=False):
-    file_out = '100_CH' + str(ch)+'_merged.continuous'
+def merge_channel(ch, data_dir=None, remove_existing=False, sig_prefix='CH'):
+    file_out = '100_' + sig_prefix + str(ch)+'_merged.continuous'
     if data_dir:
         file_out = os.path.join(data_dir, file_out)
 
@@ -72,7 +72,7 @@ def merge_channel(ch, data_dir=None, remove_existing=False):
         else:
             raise FileExistsError('output file exists.')
 
-    file_list = get_merge_channel_list(ch, data_dir)
+    file_list = get_merge_channel_list(ch, data_dir, sig_prefix=sig_prefix)
     if len(file_list) <= 1:
         raise ValueError('there are less than two files to merge, nothing to do.')
     ch_data = []
