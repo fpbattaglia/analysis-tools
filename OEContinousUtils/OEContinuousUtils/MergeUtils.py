@@ -16,7 +16,7 @@ def get_header_string(filepath):
     return header_string
 
 
-def write_continuous(filepath, ch, header_string):
+def write_continuous(filepath, ch, header_string, time_shift=True):
 
     indices = np.arange(0, OpE.MAX_NUMBER_OF_RECORDS*OpE.SAMPLES_PER_RECORD, OpE.SAMPLES_PER_RECORD, np.dtype(np.int64))
     marker = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 255], np.int8)
@@ -26,9 +26,14 @@ def write_continuous(filepath, ch, header_string):
     if not (type(ch) is list or type(ch) is tuple):
         ch = (ch,)
 
+    last_t = 0
+
     f.write(header_string)  # copy the header of the first file
     for data in ch:
         t = data['timestamps'].astype('<i8')
+        if time_shift:
+            t += last_t
+            last_t = t[-1]
         rec_numbers = data['recordingNumber'].astype('>u2')
         samples = data['data'].astype('>i2')
         n_samples = int(data['header']['blockLength'])
@@ -48,7 +53,6 @@ def write_continuous(filepath, ch, header_string):
 
 
 def get_merge_channel_list(ch, data_dir=None, sig_prefix='CH'):
-    file_list = []
 
     file_glob = '100_' + sig_prefix + str(ch)+'_?.continuous'
     if data_dir:
